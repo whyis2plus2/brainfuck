@@ -1,7 +1,7 @@
-print "Hello(comma) world!" to the terminal 5 times
+print "Hello(comma) world!" to the terminal 8 times
 
->>>+++++[<<                          begin loop w/ counter set to 8
-  ++++++++[<+++++++++>-]<.           print 'H'       (72)
+>>>++++++++[<<                        begin loop w/ counter set to 8
+  ++++++++[<+++++++++>-]<.            print 'H'       (72)
   >>+++[<+++[<+++>-]>-]<<++.          print 'e'       (101)
   +++++++..                           print 'l'       (108) twice
   +++.                                print 'o'       (111)
