@@ -12,7 +12,7 @@ typedef struct {
   enum BF_Token *data;
 } BF_TokenList;
 
-#define BF_NESTING_LIMIT 50u
+#define BF_INTERPRETER_NESTING_LIMIT 50u
 typedef struct {
   size_t len, cap;
   size_t *indicies;

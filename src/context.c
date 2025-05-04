@@ -108,7 +108,7 @@ int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx)
     case BF_TOK_BEGIN_LOOP:
       BF_jump_list_push(&ctx->loops, idx);
 
-      if (ctx->loops.len > BF_NESTING_LIMIT) return BF_ERR_TOO_NESTED;
+      if (ctx->loops.len > BF_INTERPRETER_NESTING_LIMIT) return BF_ERR_TOO_NESTED;
       break;
 
     case BF_TOK_END_LOOP:
