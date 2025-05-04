@@ -2,7 +2,7 @@
 A program that can compile brainfuck files into gnu assembly and also run brainfuck code directly
 
 ## TODO:
-- implement compiler support for other platforms (currently only supports x64 windows)
+- implement compiler support for other platforms (currently only supports x64 windows)<br>planned platforms:
   - x64 linux
   - x86 linux
  
