@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     fprintf(stderr, "Compiler error: %s\n", BF_get_error_name(compile_err));
     if (compile_err == BF_ERR_COULD_NOT_OPEN_FILE) perror("Could not open output file");
 
-    return 1;
+    return EXIT_FAILURE;
   }
 
   BF_destroy_context(&ctx);
