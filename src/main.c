@@ -13,9 +13,9 @@ int main(int argc, char **argv)
   BF_Context ctx = {0};
 
   if (argc < 2 || argc > 3) {
-    printf("Usage: brainfuck <input file> [output file]\n");
-    printf("passing only the input file will trigger the interpreter\n");
-    printf("passing in a parameter for the output file will compile the input file\n");
+    fprintf(stderr, "Usage: brainfuck <input file> [output file]\n");
+    fprintf(stderr, "passing only the input file will trigger the interpreter\n");
+    fprintf(stderr, "passing in a parameter for the output file will compile the input file\n");
     return 1;
   } else {
     int err = BF_create_context(&ctx, argv[1], 256, (argc == 2));
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
   else BF_run_context(&ctx);
 
   if (compile_err) {
-    printf("Compiler error: %s\n", BF_get_error_name(compile_err));
+    fprintf(stderr, "Compiler error: %s\n", BF_get_error_name(compile_err));
     if (compile_err == BF_ERR_COULD_NOT_OPEN_FILE) perror("Could not open output file");
 
     return 1;
