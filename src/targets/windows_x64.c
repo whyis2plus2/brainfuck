@@ -21,7 +21,6 @@ int BF_compile_context(BF_Context *ctx, const char *output_file)
     "mainCRTStartup:\n"
     "\tpush %%rbp\n"
     "\tmovq %%rsp, %%rbp\n"
-    "\tsubq $48, %%rbp\n"
     "\tmovq $%zu, %%rcx\n"
     "\tmovq $1, %%rdx\n"
     "\tcall calloc\n"
