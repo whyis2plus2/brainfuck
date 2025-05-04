@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "context.h"
-#include "errors.h"
+#include "../context.h"
+#include "../errors.h"
 
 #ifdef _WIN64
 int BF_compile_context(BF_Context *ctx, const char *output_file)

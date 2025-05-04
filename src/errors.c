@@ -11,6 +11,8 @@ char const *BF_get_error_name(enum BF_ErrCode error)
       return "BF_ERR_INVALID_TOKEN";
     case BF_ERR_COULD_NOT_OPEN_FILE:
       return "BF_ERR_COULD_NOT_OPEN_FILE";
+    case BF_ERR_BAD_TARGET:
+      return "BF_ERR_BAD_TARGET";
     case BF_ERR_TOO_NESTED:
       return "BF_ERR_TOO_NESTED";
     case BF_ERR_BAD_CELL_IDX:

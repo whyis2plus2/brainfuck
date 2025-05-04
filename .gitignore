@@ -1,4 +1,5 @@
 compile_flags.txt
+*.o
 
 .vscode/*
 build/*
