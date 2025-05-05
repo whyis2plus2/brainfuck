@@ -3,6 +3,10 @@
 
 #include "tokens.h"
 
+#if defined(_WIN64) || (defined(__linux__) && defined(__x86_64__))
+# define BF_COMPILATION_SUPPORTED 1
+#endif
+
 #ifndef BF_CONTEXT_H
 #define BF_CONTEXT_H 1
 

@@ -3,7 +3,7 @@
 #include "../context.h"
 #include "../errors.h"
 
-#ifndef _WIN64
+#ifndef BF_COMPILATION_SUPPORTED
 int BF_compile_context(BF_Context *ctx, const char *output_file)
 {
   (void)ctx; (void)output_file;
