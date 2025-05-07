@@ -13,7 +13,7 @@
 #define BF_LIST_START_CAPACITY 256u
 typedef struct {
   size_t len, cap;
-  enum BF_Token *data;
+  BF_Token *data;
 } BF_TokenList;
 
 #define BF_NESTING_LIMIT 50u
@@ -31,7 +31,7 @@ typedef struct {
   BF_JumpList  loops;
 } BF_Context;
 
-int BF_token_list_push(BF_TokenList *tl, enum BF_Token token);
+int BF_token_list_push(BF_TokenList *tl, BF_Token token);
 int BF_jump_list_push(BF_JumpList *jl, size_t idx);
 
 int BF_create_context(BF_Context *out_ctx, const char *filename, size_t num_cells, bool alloc_cells);

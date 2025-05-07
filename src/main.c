@@ -30,11 +30,20 @@ int main(int argc, char **argv)
       return EXIT_FAILURE;
     }
 
-    while (true) {
-      enum BF_Token token = BF_normalize_token(fgetc(file));
+    static char buffer[1000] = {0};
 
+    while (true) {
       if (feof(file)) break;
-      if (token != BF_TOK_NONE) BF_token_list_push(&ctx.tokens, token);
+      fgets(buffer, sizeof(buffer), file);
+
+      for (size_t i = 0; i < sizeof(buffer); ++i) {
+        if (!buffer[i]) break;
+
+        BF_Token tok = {0};
+        BF_tokenize(&tok, &i, buffer, i);
+
+        if (tok.type != BF_TOK_NONE) BF_token_list_push(&ctx.tokens, tok);
+      }
     }
 
     fclose(file);

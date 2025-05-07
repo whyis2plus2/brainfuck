@@ -7,10 +7,10 @@
 #include "errors.h"
 #include "tokens.h"
 
-int BF_token_list_push(BF_TokenList *tl, enum BF_Token token)
+int BF_token_list_push(BF_TokenList *tl, BF_Token token)
 {
   if (!tl) return BF_ERR_INVALID_PARAM;
-  if (BF_normalize_token(token) == BF_TOK_NONE) return BF_ERR_INVALID_TOKEN;
+  if (BF_normalize_token_type(token.type) == BF_TOK_NONE) return BF_ERR_INVALID_TOKEN;
 
   if (tl->len == tl->cap) {
     tl->cap = (tl->cap)? tl->cap * 2 : BF_LIST_START_CAPACITY;
@@ -85,26 +85,18 @@ int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx, bool do_io)
   if (!ctx->num_cells || !ctx->cells) return BF_ERR_INVALID_PARAM;
   if (idx > ctx->tokens.len) return BF_ERR_INVALID_PARAM;
 
-  switch (ctx->tokens.data[idx]) {
+  const BF_Token tok = ctx->tokens.data[idx];
+  switch (tok.type) {
+    case BF_NUM_TOKEN_TYPES:
     case BF_TOK_NONE: break;
 
-    case BF_TOK_INC:
-      ++ctx->cells[ctx->current_index];
-
+    case BF_TOK_ARITH:
+      ctx->cells[ctx->current_index] += tok.arith.amount;
       break;
 
-    case BF_TOK_DEC:
-      --ctx->cells[ctx->current_index];
-      break;
-
-    case BF_TOK_NEXT:
-      ++ctx->current_index;
+    case BF_TOK_MOVIDX:
+      ctx->current_index += tok.mov_idx.amount;
       if (ctx->current_index >= ctx->num_cells) return BF_ERR_BAD_CELL_IDX;
-      break;
-
-    case BF_TOK_PREV:
-      --ctx->current_index;
-      if (ctx->current_index == SIZE_MAX) return BF_ERR_BAD_CELL_IDX;
       break;
 
     case BF_TOK_BEGIN_LOOP:
