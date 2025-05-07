@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     fprintf(stderr, "Usage: brainfuck <input file> [output file]\n");
     fprintf(stderr, "passing only the input file will trigger the interpreter\n");
     fprintf(stderr, "passing in a parameter for the output file will compile the input file\n");
-    return 1;
+    return EXIT_FAILURE;
   } else {
     int err = BF_create_context(&ctx, argv[1], 256, (argc == 2));
     if (err) {
