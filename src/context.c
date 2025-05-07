@@ -79,7 +79,7 @@ int BF_destroy_context(BF_Context *ctx)
   return 0;
 }
 
-int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx)
+int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx, bool do_io)
 {
   if (!ctx) return BF_ERR_INVALID_PARAM;
   if (!ctx->num_cells || !ctx->cells) return BF_ERR_INVALID_PARAM;
@@ -99,16 +99,18 @@ int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx)
 
     case BF_TOK_NEXT:
       ++ctx->current_index;
+      if (ctx->current_index >= ctx->num_cells) return BF_ERR_BAD_CELL_IDX;
       break;
 
     case BF_TOK_PREV:
       --ctx->current_index;
+      if (ctx->current_index == SIZE_MAX) return BF_ERR_BAD_CELL_IDX;
       break;
 
     case BF_TOK_BEGIN_LOOP:
       BF_jump_list_push(&ctx->loops, idx);
 
-      if (ctx->loops.len > BF_INTERPRETER_NESTING_LIMIT) return BF_ERR_TOO_NESTED;
+      if (ctx->loops.len > BF_NESTING_LIMIT) return BF_ERR_TOO_NESTED;
       break;
 
     case BF_TOK_END_LOOP:
@@ -125,10 +127,12 @@ int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx)
       break;
 
     case BF_TOK_PRINT:
+      if (!do_io) break;
       putchar((char)ctx->cells[ctx->current_index]);
       break;
 
     case BF_TOK_INPUT:
+      if (!do_io) break;
       ctx->cells[ctx->current_index] = getchar();
       break;
   }
@@ -143,7 +147,26 @@ int BF_run_context(BF_Context *ctx)
   if (!ctx->num_cells || !ctx->cells) return BF_ERR_INVALID_PARAM;
 
   for (size_t i = 0; i < ctx->tokens.len; ++i) {
-      BF_eval_token(&i, ctx, i);
+    int result = BF_eval_token(&i, ctx, i, true);
+    if (result) return result;
+  }
+
+  return 0;
+}
+
+// check for errors in a context without changing the state of any of the cells
+// this works even if no cells have been allocated
+int BF_test_context(const BF_Context *ctx)
+{
+  if (!ctx) return BF_ERR_INVALID_PARAM;
+  if (!ctx->num_cells) return BF_ERR_INVALID_PARAM;
+
+  BF_Context local = *ctx;
+  local.cells = calloc(1, local.num_cells);
+
+  for (size_t i = 0; i < ctx->tokens.len; ++i) {
+    int result = BF_eval_token(&i, &local, i, false);
+    if (result) return result;
   }
 
   return 0;

@@ -40,13 +40,11 @@ int main(int argc, char **argv)
     fclose(file);
   }
 
-  int compile_err = 0;
-  if (argc == 3) compile_err = BF_compile_context(&ctx, argv[2]);
-  else BF_run_context(&ctx);
+  int result = (argc == 3)? BF_compile_context(&ctx, argv[2]) : BF_run_context(&ctx);
 
-  if (compile_err) {
-    fprintf(stderr, "Compiler error: %s\n", BF_get_error_name(compile_err));
-    if (compile_err == BF_ERR_COULD_NOT_OPEN_FILE) perror("Could not open output file");
+  if (result) {
+    fprintf(stderr, "Error: %s\n", BF_get_error_name(result));
+    if (result == BF_ERR_COULD_NOT_OPEN_FILE) perror("Could not open output file");
 
     return EXIT_FAILURE;
   }

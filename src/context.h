@@ -16,7 +16,7 @@ typedef struct {
   enum BF_Token *data;
 } BF_TokenList;
 
-#define BF_INTERPRETER_NESTING_LIMIT 50u
+#define BF_NESTING_LIMIT 50u
 typedef struct {
   size_t len, cap;
   size_t *indicies;
@@ -36,8 +36,12 @@ int BF_jump_list_push(BF_JumpList *jl, size_t idx);
 
 int BF_create_context(BF_Context *out_ctx, const char *filename, size_t num_cells, bool alloc_cells);
 int BF_destroy_context(BF_Context *ctx);
-int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx);
+int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx, bool do_io);
 int BF_run_context(BF_Context *ctx);
+
+// check for errors in a context without changing the state of any of the cells
+// this works even if no cells have been allocated
+int BF_test_context(const BF_Context *ctx);
 
 // generate an assembly file from a context
 // this file can be assembled and linked into an executable

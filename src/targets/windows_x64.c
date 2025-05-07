@@ -11,6 +11,9 @@ int BF_compile_context(BF_Context *ctx, const char *output_file)
   FILE *out = fopen(output_file, "w+");
   if (!out) return BF_ERR_COULD_NOT_OPEN_FILE;
 
+  int test = BF_test_context(ctx);
+  if (test) return test;
+
   fprintf(
     out,
     "# gas x64 windowsNT\n"
