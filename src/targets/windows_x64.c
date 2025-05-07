@@ -33,25 +33,18 @@ int BF_compile_context(BF_Context *ctx, const char *output_file)
 
   for (size_t i = 0; i < ctx->tokens.len; ++i) {
     // printf("Token: %s\n", BF_get_token_name(ctx.tokens.data[i]));
-    enum BF_Token const token = ctx->tokens.data[i];
+    const BF_Token tok = ctx->tokens.data[i];
 
-    switch (token) {
+    switch (tok.type) {
+      case BF_NUM_TOKEN_TYPES:
       case BF_TOK_NONE: break;
 
-      case BF_TOK_INC:
-        fprintf(out, "\tincb (%%r12)\n");
+      case BF_TOK_ARITH:
+        fprintf(out, "\taddb $%u, (%%r12)\n", (uint8_t)tok.arith.amount);
         break;
 
-      case BF_TOK_DEC:
-        fprintf(out, "\tdecb (%%r12)\n");
-        break;
-
-      case BF_TOK_NEXT:
-        fprintf(out, "\tincq %%r12\n");
-        break;
-
-      case BF_TOK_PREV:
-        fprintf(out, "\tdecq %%r12\n");
+      case BF_TOK_MOVIDX:
+        fprintf(out, "\taddq $%ju, %%r12\n", tok.mov_idx.amount);
         break;
 
       case BF_TOK_BEGIN_LOOP:
