@@ -19,12 +19,12 @@ enum BF_TokenType
 
 typedef struct {
   enum BF_TokenType type;
-  uint16_t amount;
+  uint8_t amount;
 } BF_TokenArith;
 
 typedef struct {
   enum BF_TokenType type;
-  int64_t amount;
+  size_t amount;
 } BF_TokenMovIdx;
 
 typedef union {

@@ -39,11 +39,11 @@ int BF_compile_context(BF_Context *ctx, const char *output_file)
       case BF_TOK_NONE: break;
 
       case BF_TOK_ARITH:
-        fprintf(out, "\taddb $%u, (%%r12)\n", (uint8_t)tok.arith.amount);
+        fprintf(out, "\taddb $%u, (%%r12)\n", tok.arith.amount);
         break;
 
       case BF_TOK_MOVIDX:
-        fprintf(out, "\taddq $%ju, %%r12\n", tok.mov_idx.amount);
+        fprintf(out, "\taddq $%zu, %%r12\n", tok.mov_idx.amount);
         break;
 
       case BF_TOK_BEGIN_LOOP:

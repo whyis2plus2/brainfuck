@@ -18,12 +18,12 @@ int BF_tokenize(BF_Token *out, size_t *out_idx, const char *src, size_t start_id
     switch (src[i]) {
       case '+':
         result.type = BF_TOK_ARITH;
-        result.arith.amount = (result.arith.amount + 1) % 255;
+        ++result.arith.amount;
         break;
 
       case '-':
         result.type = BF_TOK_ARITH;
-        result.arith.amount = (result.arith.amount - 1) % 255;
+        --result.arith.amount;
         break;
 
       case '>':
