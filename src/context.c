@@ -125,8 +125,9 @@ int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx, bool do_io)
 
     case BF_TOK_INPUT:
       if (!do_io) break;
-      ctx->cells[ctx->current_index] = getchar();
-      if (ctx->cells[ctx->current_index] == '\n') ctx->cells[ctx->current_index] = getchar();
+      char buffer[4] = {0};
+      fgets(buffer, sizeof(buffer), stdin);
+      ctx->cells[ctx->current_index] = buffer[0];
       break;
   }
 
