@@ -120,12 +120,13 @@ int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx, bool do_io)
 
     case BF_TOK_PRINT:
       if (!do_io) break;
-      putchar((char)ctx->cells[ctx->current_index]);
+      printf("%c", ctx->cells[ctx->current_index]);
       break;
 
     case BF_TOK_INPUT:
       if (!do_io) break;
       ctx->cells[ctx->current_index] = getchar();
+      if (ctx->cells[ctx->current_index] == '\n') ctx->cells[ctx->current_index] = getchar();
       break;
   }
 
