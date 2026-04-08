@@ -39,12 +39,7 @@ int BF_destroy_context(BF_Context *ctx);
 int BF_eval_token(size_t *out_idx, BF_Context *ctx, size_t idx, bool do_io);
 int BF_run_context(BF_Context *ctx);
 
-// check for errors in a context without changing the state of any of the cells
-// this works even if no cells have been allocated
-int BF_test_context(const BF_Context *ctx);
-
-// generate an assembly file from a context
-// this file can be assembled and linked into an executable
+// generate a C file from a context
 int BF_compile_context(BF_Context *ctx, const char *output_file);
 
 #endif // !BF_CONTEXT_H

@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -146,20 +147,56 @@ int BF_run_context(BF_Context *ctx)
   return 0;
 }
 
-// check for errors in a context without changing the state of any of the cells
-// this works even if no cells have been allocated
-int BF_test_context(const BF_Context *ctx)
+// generate a C file from a context
+int BF_compile_context(BF_Context *ctx, const char *output_file)
 {
-  if (!ctx) return BF_ERR_INVALID_PARAM;
-  if (!ctx->num_cells) return BF_ERR_INVALID_PARAM;
+  if (!ctx || !output_file) return BF_ERR_INVALID_PARAM;
 
-  BF_Context local = *ctx;
-  local.cells = calloc(1, local.num_cells);
+  FILE *file = fopen(output_file, "w");
+  if (!file) return BF_ERR_COULD_NOT_OPEN_FILE;
+
+  fprintf(
+    file,
+    "#include <stdint.h>\n"
+    "#include <stdio.h>\n"
+    "int main(void){\n"
+    "size_t idx=0;\n"
+    "static uint8_t ctx[%zu]={0};\n",
+    ctx->num_cells
+  );
 
   for (size_t i = 0; i < ctx->tokens.len; ++i) {
-    int result = BF_eval_token(&i, &local, i, false);
-    if (result) return result;
+    const BF_Token *tok = &ctx->tokens.data[i];
+    switch (tok->type) {
+      case BF_TOK_ARITH:
+        fprintf(file, "ctx[idx]+=%" PRIu8 ";\n", tok->arith.amount);
+        break;
+      
+      case BF_TOK_MOVIDX:
+        fprintf(file, "idx+=%zuu;\n", tok->mov_idx.amount);
+        break;
+
+      case BF_TOK_BEGIN_LOOP:
+        fprintf(file, "while(ctx[idx]){\n");
+        break;
+
+      case BF_TOK_END_LOOP:
+        fprintf(file, "}\n");
+        break;
+
+      case BF_TOK_PRINT:
+        fprintf(file, "putchar(ctx[idx]);\n");
+        break;
+
+      case BF_TOK_INPUT:
+        fprintf(file, "ctx[idx]=(uint8_t)getchar();\n");
+        break;
+
+      default: break;
+    }
   }
 
+  fprintf(file, "return 0;\n}");
+  fclose(file);
   return 0;
 }

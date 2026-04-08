@@ -4,5 +4,3 @@ sources += files(
     'main.c',
     'tokens.c',
 )
-
-subdir('targets')
