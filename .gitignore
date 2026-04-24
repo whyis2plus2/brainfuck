@@ -1,5 +1,8 @@
 compile_flags.txt
 *.o
+*.exe
 
+.zig-cache/*
 .vscode/*
 build/*
+zig-out/*
